@@ -1,6 +1,6 @@
 #!/bin/bash
 
-AMI_ID="ami-09c813fb71547fc4f"
+AMI_ID="ami-07ff62358b87c7116"
 SG_ID="sg-0eceac836e52f5116"
 ZONE_ID="Z09554163BEIVGQB3DW1S"
 DOMAIN_NAME="raviteja.store"
