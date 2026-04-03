@@ -8,6 +8,7 @@ N="\e[0m"
 
 LOGS_FOLDER="/var/log/shell-roboshop"
 SCRIPT_NAME=$( echo $0 | cut -d "." -f1 )
+SCRIPT_DIR = $PWD
 MONGODB_HOST = mongodb.raviteja.store
 LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log" # /var/log/shell-script/16-logs.log
 
@@ -53,7 +54,7 @@ VALIDATE $? "unzip catalogue"
 npm install &>>$LOG_FILE
 VALIDATE $? "install dependencies"
 
-cp catalogue.service /etc/systemd/system/catalogue.service
+cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service
 VALIDATE $? "copy systemctl service"
 
 systemctl daemon-reload
@@ -66,6 +67,6 @@ VALIDATE $? "copy mango repo"
 dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "Install Mongodb client"
 
-mongosh --host $MONGODB_HOST </app/db/master-data.js
+mongosh --host $MONGODB_HOST </app/db/master-data.js &>>$LOG_FILE
 VALIDATE $? "Load catalogue products"
 systemctl restart catalogue
