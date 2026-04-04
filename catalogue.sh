@@ -41,7 +41,7 @@ VALIDATE $? "Installing NodeJS"
 
 id roboshop &>>$LOG_FILE
 
-if [ $? -ne 0]; then
+if [ $? -ne 0 ]; then
 
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
     VALIDATE $? "creating system user"
@@ -57,7 +57,7 @@ VALIDATE $? "download catalogue application"
 cd /app 
 VALIDATE $? "changing to  app directory"
 rm -rf /app/*
-validate $? "removing existing code"
+VALIDATE $? "removing existing code"
 unzip /tmp/catalogue.zip &>>$LOG_FILE
 VALIDATE $? "unzip catalogue"
 
