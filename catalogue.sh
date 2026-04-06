@@ -74,7 +74,7 @@ VALIDATE $? "Enable catalogue"
 cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
 VALIDATE $? "copy mongo repo"
 
-dnf install mongodb-mongoshfds -y &>>$LOG_FILE
+dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "Install Mongodb client"
 INDEX=$(mongosh mongodb.raviteja.store --quiet --eval "db.getMongo().getDBNames().indexOf('catalogue')")
 if [ $INDEX -le 0 ]; then
