@@ -44,44 +44,32 @@ fi
 mkdir -p /app
 VALIDATE $? "creating app directory"
 
-curl -o /tmp/shipping.zip https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip  &>>$LOG_FILE
-VALIDATE $? "download shipping application"
+curl -o /tmp/payment.zip https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip  &>>$LOG_FILE
+VALIDATE $? "download payment application"
 cd /app 
 VALIDATE $? "changing to  app directory"
 rm -rf /app/*
 VALIDATE $? "removing existing code"
 
-unzip /tmp/shipping.zip &>>$LOG_FILE
-VALIDATE $? "unzip shipping"
+unzip /tmp/payment.zip &>>$LOG_FILE
+VALIDATE $? "unzip payment"
 
-mvn clean package 
-mv target/shipping-1.0.jar shipping.jar
-
+pip3 install -r requirements.txt &>>$LOG_FILE
 
 
-cp $SCRIPT_DIR/shipping.service /etc/systemd/system/shipping.service
+
+cp $SCRIPT_DIR/payment.service /etc/systemd/system/payment.service
 VALIDATE $? "copy systemctl service"
 
 systemctl daemon-reload
 
-systemctl enable shipping &>>$LOG_FILE
-VALIDATE $? "Enable shipping"
+systemctl enable payment &>>$LOG_FILE
+VALIDATE $? "Enable payment"
 
 
-dnf install mysql -y
 
-mysql -h $MYSQL_HOST -uroot -pRoboShop@1 -e "use cities" &>>$LOG_FILE
-
-if [ $? -ne 0 ]; then
-    mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/schema.sql &>>$LOG_FILE
-    mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/app-user.sql &>>$LOG_FILE 
-    mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/master-data.sql &>>$LOG_FILE
-else
-    echo -e "Shipping data is already loaded ... $Y SKIPPING $N"
-fi
-
-systemctl restart shipping &>>$LOG_FILE
-VALIDATE $? "Restarted shipping"
+systemctl restart payment &>>$LOG_FILE
+VALIDATE $? "Restarted payment"
 
 
 
